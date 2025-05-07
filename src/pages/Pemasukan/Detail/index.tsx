@@ -33,11 +33,7 @@ const Detail = ({navigation, route}) => {
 
       <Gap height={54} />
       <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Pemasukan', {
-            screen: 'DshbrdPemasukan',
-          });
-        }}
+        onPress={() => navigation.navigate('DshbrdPemasukan')}
         activeOpacity={0.5}>
         <Text style={styles.back}>Kembali ke Dashboard</Text>
       </TouchableOpacity>

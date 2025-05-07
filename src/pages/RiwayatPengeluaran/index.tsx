@@ -1,34 +1,50 @@
 import {StyleSheet, View, FlatList} from 'react-native';
-import React from 'react';
-import Header from '../../components/moleculs/Header';
-import ItemRiwayat from '../../components/moleculs/ItemRiwayat'; // import molecule baru
+import React, {useEffect, useState} from 'react';
+import {getDatabase, ref, onValue} from 'firebase/database';
 
-const dataPengeluaran = [
-  {
-    id: '1',
-    title: 'Kebutuhan Makanan',
-    price: 'Rp20.000',
-    date: '20 April 2025',
-  },
-  {
-    id: '2',
-    title: 'Kebutuhan Makanan',
-    price: 'Rp15.000',
-    date: '25 April 2025',
-  },
-  {id: '3', title: 'Kebutuhan Rumah', price: 'Rp50.000', date: '3 April 2025'},
-];
+import Header from '../../components/moleculs/Header';
+import ItemRiwayat from '../../components/moleculs/ItemRiwayat';
 
 const RiwayatPengeluaran = () => {
+  const [pengeluarans, setPengeluarans] = useState([]);
+
+  useEffect(() => {
+    const db = getDatabase();
+    const pengeluaranRef = ref(db, 'pengeluaran');
+
+    const unsubscribe = onValue(pengeluaranRef, snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        const list = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key],
+        }));
+
+        // Urutkan berdasarkan waktu terbaru (createdAt)
+        list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        setPengeluarans(list);
+      } else {
+        setPengeluarans([]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const renderItem = ({item}) => (
-    <ItemRiwayat title={item.title} price={item.price} date={item.date} />
+    <ItemRiwayat
+      title={item.keterangan || 'Tanpa Keterangan'}
+      price={`Rp${item.jumlah}`}
+      date={item.tanggal}
+    />
   );
 
   return (
     <View style={styles.container}>
       <Header title="Riwayat Pengeluaran" />
       <FlatList
-        data={dataPengeluaran}
+        data={pengeluarans}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}

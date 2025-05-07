@@ -6,12 +6,13 @@ import Button from '../../../components/atoms/Button';
 import Card from '../../../components/atoms/Card';
 import Gap from '../../../components/atoms/Gap';
 import {getDatabase, ref, onValue} from 'firebase/database';
+import {useNavigation} from '@react-navigation/native';
 
-const DshbrdPemasukan = ({navigation, route}) => {
+const DshbrdPemasukan = ({route}) => {
+  const navigation = useNavigation();
   const [transactions, setTransactions] = useState([]);
 
-
-  const params = route.params || {};
+  const params = route?.params || {};
   const newTransaction = params.newTransaction;
   const existingTransactions = params.existingTransactions || [];
 
@@ -42,11 +43,12 @@ const DshbrdPemasukan = ({navigation, route}) => {
         snapshot => {
           if (snapshot.exists()) {
             const data = snapshot.val();
-            const transactionList = Object.keys(data).map(key => ({
-              id: key,
-              ...data[key],
-            }))
-            .reverse();
+            const transactionList = Object.keys(data)
+              .map(key => ({
+                id: key,
+                ...data[key],
+              }))
+              .reverse();
 
             const incomeTransactions = transactionList.filter(
               t => t.type === 'pemasukan',
@@ -73,9 +75,9 @@ const DshbrdPemasukan = ({navigation, route}) => {
   const latestJumlah = transactions.length > 0 ? transactions[0].jumlah : 0;
 
   const onSubmit = () => {
-    navigation.navigate('Pemasukan', {
-      screen: 'AddPemasukan',
-      params: {transactions},
+    // Navigasi ke AddPemasukan dalam stack yang sama
+    navigation.navigate('AddPemasukan', {
+      transactions,
     });
   };
 

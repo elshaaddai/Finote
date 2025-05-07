@@ -1,11 +1,12 @@
 import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getDatabase, ref, push} from 'firebase/database';
 
 import Header from '../../components/moleculs/Header';
 import TextInput from '../../components/moleculs/TextInput';
 import Gap from '../../components/atoms/Gap';
 import Button from '../../components/atoms/Button';
+import {showMessage} from 'react-native-flash-message';
 
 const BuatKebutuhan = ({navigation}) => {
   const [nama, setNama] = useState('');
@@ -15,31 +16,48 @@ const BuatKebutuhan = ({navigation}) => {
 
   const handleSubmit = async () => {
     if (!nama || !nominal) {
-      alert('Nama dan Nominal wajib diisi');
+      showMessage({
+        message: 'Nama dan Nominal wajib diisi',
+        type: 'danger',
+      });
       return;
     }
 
     const newKategori = {
       title: nama,
-      amount: nominal,
+      amount: parseInt(nominal, 10),
       description: deskripsi || '-',
-      batas: batas || '0',
+      batas: parseInt(batas || '0', 10),
+      createdAt: new Date().toISOString(),
     };
 
     try {
-      const existing = await AsyncStorage.getItem('kategori');
-      const kategoriArray = existing ? JSON.parse(existing) : [];
-      kategoriArray.push(newKategori);
-      await AsyncStorage.setItem('kategori', JSON.stringify(kategoriArray));
+      const db = getDatabase();
+      const kategoriRef = ref(db, 'kategori');
+      await push(kategoriRef, newKategori);
+
+      showMessage({
+        message: 'Kategori berhasil dibuat',
+        type: 'success',
+      });
+
       navigation.navigate('KategoriKebutuhan');
     } catch (error) {
-      console.error('Gagal menyimpan data:', error);
+      console.error('Gagal menyimpan data ke Firebase:', error);
+      showMessage({
+        message: 'Gagal menyimpan data ke Firebase',
+        type: 'danger',
+      });
     }
   };
 
   return (
     <View style={styles.container}>
-      <Header title="Buat Kategori Kebutuhan" />
+      <Header
+        title="Buat Kategori Kebutuhan"
+        withBackIcon
+        onPress={() => navigation.goBack()}
+      />
       <Gap height={25} />
       <TextInput
         label="Nama Kategori"
@@ -52,7 +70,7 @@ const BuatKebutuhan = ({navigation}) => {
         label="Nominal"
         placeholder="Rp"
         value={nominal}
-        onChangeText={setNominal}
+        onChangeText={text => setNominal(text.replace(/[^0-9]/g, ''))}
         keyboardType="numeric"
       />
       <Gap height={20} />
@@ -67,7 +85,7 @@ const BuatKebutuhan = ({navigation}) => {
         label="Batas Minimum Sisa"
         placeholder="Rp"
         value={batas}
-        onChangeText={setBatas}
+        onChangeText={text => setBatas(text.replace(/[^0-9]/g, ''))}
         keyboardType="numeric"
       />
       <Gap height={15} />
@@ -81,5 +99,6 @@ export default BuatKebutuhan;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
 });
