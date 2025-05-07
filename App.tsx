@@ -26,6 +26,7 @@ const App = () => {
           {/* Hapus Pemasukan dari root navigator karena sekarang ada di dalam PemasukanStack */}
           {/* <Stack.Screen name="Pemasukan" component={Pemasukan} /> */}
           <Stack.Screen name="BottomTabs" component={BottomTabs} />
+          <Stack.Screen name="AddPemasukan" component={AddPemasukan} />
         </Stack.Navigator>
       </NavigationContainer>
       <FlashMessage position="top" floating={true} duration={2000} />
