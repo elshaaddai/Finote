@@ -4,7 +4,7 @@ import {Finote} from '../../assets';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => navigation.replace('WelcomePage'), 3000);
+    setTimeout(() => navigation.navigate('WelcomePage'), 3000);
   }, []);
   return (
     <View style={styles.container}>

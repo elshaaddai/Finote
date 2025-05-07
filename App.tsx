@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import SplashScreen from './src/pages/SplashScreen';
-import WelcomePage from './src/pages/Dshbrd';
+import WelcomePage from './src/pages/Tampilan';
 import SignUpPage from './src/pages/SignUp';
 import LoginPage from './src/pages/SignIn';
 import Settings from './src/pages/Settings';
@@ -24,27 +24,27 @@ const App = () => {
     <>
       <NavigationContainer>
         <Stack.Navigator>
-          {/* <Stack.Screen
+          <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
             options={{headerShown: false}}
-          /> */}
-          {/* <Stack.Screen
+          />
+          <Stack.Screen
             name="WelcomePage"
             component={WelcomePage}
             options={{headerShown: false}}
-          /> */}
-            <Stack.Screen
-              name="SignUpPage"
-              component={SignUpPage}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="LoginPage"
-              component={LoginPage}
-              options={{headerShown: false}}
-            />
-          {/* <Stack.Screen
+          />
+          <Stack.Screen
+            name="SignUpPage"
+            component={SignUpPage}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="LoginPage"
+            component={LoginPage}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="DashboardPage"
             component={DashboardPage}
             options={{headerShown: false}}
@@ -78,7 +78,7 @@ const App = () => {
             name="BottomTabs"
             component={BottomTabs}
             options={{headerShown: false}}
-          /> */}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       <FlashMessage position="top" floating={true} duration={2000} />

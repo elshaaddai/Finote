@@ -68,7 +68,7 @@ const SignUpPage = ({navigation}) => {
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
-            secureTextEntry
+            secureTextEntry={true}
           />
           <Gap height={20} />
         </View>
