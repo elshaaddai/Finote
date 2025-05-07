@@ -236,7 +236,7 @@ const AddPemasukan = ({navigation, route}) => {
             onChangeText={text => setKeterangan(text)}
           />
         </View>
-        <Gap height={168} />
+        <Gap height={120} />
 
         <Button label="Simpan" onPress={onSimpan} />
       </View>

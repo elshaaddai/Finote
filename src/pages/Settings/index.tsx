@@ -4,22 +4,89 @@ import Header from '../../components/moleculs/Header';
 import Gap from '../../components/atoms/Gap';
 import TextInput from '../../components/moleculs/TextInput';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+  getAuth,
+  signOut,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from 'firebase/auth';
+import {getDatabase, ref, remove} from 'firebase/database';
+import {Alert} from 'react-native';
 
-const Settings = () => {
+const Settings = ({navigation}) => {
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
   const [isReminderEnabled, setIsReminderEnabled] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
   const [Periode, setPeriode] = useState('Tahunan');
   const periodeList = ['Bulanan', 'Mingguan', 'Harian'];
+  const [password, setPassword] = useState('');
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
 
   const toggleNotification = () =>
     setIsNotificationEnabled(previousState => !previousState);
   const toggleReminder = () =>
     setIsReminderEnabled(previousState => !previousState);
 
+  const auth = getAuth();
+  const db = getDatabase();
+
+  const Delete = () => {
+    Alert.alert(
+      'Konfirmasi',
+      'Apakah Anda yakin ingin menghapus akun ini? Tindakan ini tidak dapat dibatalkan.',
+      [
+        {text: 'Batal', style: 'cancel'},
+        {
+          text: 'Hapus',
+          style: 'destructive',
+          onPress: async () => {
+            const user = auth.currentUser;
+
+            if (user) {
+              try {
+                const credential = EmailAuthProvider.credential(
+                  user.email,
+                  password,
+                );
+
+                await reauthenticateWithCredential(user, credential);
+                await remove(ref(db, 'users/' + user.uid));
+                await user.delete();
+
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'SignUpPage'}], 
+                });
+              } catch (error) {
+                console.log('Gagal hapus akun: ', error);
+                Alert.alert(
+                  'Error',
+                  'Gagal hapus akun. Mungkin karena sesi sudah kadaluarsa atau kredensial salah.',
+                );
+              }
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  const Logout = () => {
+    signOut(auth)
+      .then(() => {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'LoginPage'}],
+        });
+      })
+      .catch(error => {
+        console.log('Logout error:', error);
+      });
+  };
+
   return (
     <View>
-      <Header title="Settings" />
+      <Header title="Settings" withBackIcon/>
       <View style={styles.container}>
         <Gap height={32} />
         <Text style={styles.notif}>Notifikasi & Pengingat</Text>
@@ -84,15 +151,40 @@ const Settings = () => {
           </View>
         )}
 
-        <Gap height={39} />
+        <Gap height={20} />
         <View style={styles.line} />
 
-        <Gap height={45} />
+        <Gap height={20} />
         <Text style={styles.notif}>Panduan Pengguna</Text>
         <Gap height={15} />
-        <Text style={styles.notif}>Hapus Akun</Text>
+        <TouchableOpacity
+          onPress={() => {
+            if (!showPasswordInput) {
+              setShowPasswordInput(true);
+            } else {
+              Delete();
+            }
+          }}>
+          <Text style={styles.notif}>Hapus Akun</Text>
+        </TouchableOpacity>
+
+        {showPasswordInput && (
+          <>
+            <Gap height={15} />
+            <TextInput
+              placeholder="Masukkan Password"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+              customStyle={{marginHorizontal: 0}}
+            />
+          </>
+        )}
         <Gap height={15} />
-        <Text style={styles.logout}>Log Out</Text>
+
+        <TouchableOpacity onPress={Logout}>
+          <Text style={styles.logout}>Log Out</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

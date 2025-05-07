@@ -5,8 +5,8 @@ import Gap from '../../components/atoms/Gap';
 import Button from '../../components/atoms/Button';
 import TextInput from '../../components/moleculs/TextInput';
 import {Google} from '../../assets';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { showMessage } from 'react-native-flash-message';
+import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import {showMessage} from 'react-native-flash-message';
 
 const LoginPage = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -14,17 +14,18 @@ const LoginPage = ({navigation}) => {
 
   const onSubmit = () => {
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password).then(userCredential => {
-      const user = userCredential.user;
-      navigation.navigate('DashboardPage', {uid: user.uid});
-    })
-    .catch(error => {
-      const errorMessage = error.message;
-      showMessage({
-        message: errorMessage,
-        type: 'danger',
+    signInWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+        navigation.replace('BottomTabs'); // Ganti dari 'DashboardPage'
+      })
+      .catch(error => {
+        const errorMessage = error.message;
+        showMessage({
+          message: errorMessage,
+          type: 'danger',
+        });
       });
-    });
   };
 
   return (
@@ -39,18 +40,24 @@ const LoginPage = ({navigation}) => {
       </TouchableOpacity>
       <Gap height={20} />
       <View style={styles.inputWrapper}>
-        <TextInput placeholder="Your Email" keyboardType="email-address" value={email} onChangeText={value=>setEmail(value)} />
+        <TextInput
+          placeholder="Your Email"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={value => setEmail(value)}
+        />
         <Gap height={20} />
 
-        <TextInput placeholder="Password" secureTextEntry value={password} onChangeText={value => setPassword(value)} />
+        <TextInput
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={value => setPassword(value)}
+        />
       </View>
       <Gap height={30} />
 
-      <Button
-        label="Login"
-        onPress={onSubmit}
-        height={55}
-      />
+      <Button label="Login" onPress={onSubmit} height={55} />
     </View>
   );
 };
