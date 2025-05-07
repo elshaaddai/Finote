@@ -15,13 +15,13 @@ const Detail = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <Header title="Detail Pemasukan" />
-      <Gap height={60} />
+      <Gap height={50} />
       <Card style={styles.card}>
         <Text style={styles.mount}>{formatCurrency(jumlah)}</Text>
         <Text style={styles.total}>Total Pemasukan</Text>
         <View style={styles.line} />
 
-        <Gap height={44} />
+        <Gap height={30} />
         <Row label="Tanggal" value={tanggal} />
         <Gap height={27} />
         <Row label="Periode" value={periode} />
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 380,
-    height: 538,
+    height: 500,
     marginHorizontal: 16,
     textAlign: 'center',
   },
@@ -86,6 +86,6 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     marginTop: 8,
     textAlign: 'center',
-    marginRight: 5,
+    marginRight: 15,
   },
 });
