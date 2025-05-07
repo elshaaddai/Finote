@@ -10,7 +10,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import BottomTabs from './src/components/moleculs/BottomTabs';
 import FlashMessage from 'react-native-flash-message';
-import Pemasukan from './src/pages/Pemasukan';
+import AddPemasukan from './src/pages/Pemasukan/AddPemasukan';
 
 const Stack = createNativeStackNavigator();
 
