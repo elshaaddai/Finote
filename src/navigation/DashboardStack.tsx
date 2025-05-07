@@ -2,6 +2,7 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import DashboardPage from '../pages/Dshbrd';
 import Settings from '../pages/Settings';
+import Detail from '../pages/Pemasukan/Detail';
 
 const Stack = createNativeStackNavigator();
 
