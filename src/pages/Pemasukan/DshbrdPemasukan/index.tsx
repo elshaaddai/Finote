@@ -5,19 +5,72 @@ import LastTransaksi from '../LastTransaksi';
 import Button from '../../../components/atoms/Button';
 import Card from '../../../components/atoms/Card';
 import Gap from '../../../components/atoms/Gap';
+import {getDatabase, ref, onValue} from 'firebase/database';
 
 const DshbrdPemasukan = ({navigation, route}) => {
-  const {jumlah, periode} = route.params || {};
-
   const [transactions, setTransactions] = useState([]);
 
-  const {newTransaction, existingTransactions} = route.params || {};
+
+  const params = route.params || {};
+  const newTransaction = params.newTransaction;
+  const existingTransactions = params.existingTransactions || [];
 
   useEffect(() => {
     if (newTransaction) {
-      setTransactions([newTransaction, ...(existingTransactions || [])]);
+      setTransactions(currentTransactions => {
+        const exists = currentTransactions.some(
+          t =>
+            t.jumlah === newTransaction.jumlah &&
+            t.tanggal === newTransaction.tanggal &&
+            t.sumber === newTransaction.sumber,
+        );
+
+        if (exists) {
+          return currentTransactions;
+        }
+
+        return [newTransaction, ...currentTransactions];
+      });
+    } else if (existingTransactions.length > 0) {
+      setTransactions(existingTransactions);
+    } else {
+      const db = getDatabase();
+      const transactionsRef = ref(db, 'transactions');
+
+      onValue(
+        transactionsRef,
+        snapshot => {
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            const transactionList = Object.keys(data).map(key => ({
+              id: key,
+              ...data[key],
+            }))
+            .reverse();
+
+            const incomeTransactions = transactionList.filter(
+              t => t.type === 'pemasukan',
+            );
+
+            setTransactions(incomeTransactions);
+          }
+        },
+        {
+          onlyOnce: true,
+        },
+      );
     }
-  }, [newTransaction]);
+  }, [newTransaction, existingTransactions]);
+
+  const formatCurrency = amount => {
+    return amount
+      ? `Rp ${parseInt(amount, 10).toLocaleString('id-ID')}`
+      : 'Rp 0';
+  };
+
+  const latestPeriode =
+    transactions.length > 0 ? transactions[0].periode : 'Periode';
+  const latestJumlah = transactions.length > 0 ? transactions[0].jumlah : 0;
 
   const onSubmit = () => {
     navigation.navigate('Pemasukan', {
@@ -25,6 +78,7 @@ const DshbrdPemasukan = ({navigation, route}) => {
       params: {transactions},
     });
   };
+
   return (
     <View style={styles.container}>
       <Header title={'Catatan Pemasukan'} />

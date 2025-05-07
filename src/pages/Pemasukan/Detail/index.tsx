@@ -6,58 +6,36 @@ import Card from '../../../components/atoms/Card';
 import Row from './Row';
 
 const Detail = ({navigation, route}) => {
-  const params = route?.params ?? {};
-  const {
-    jumlah = '0',
-    tanggal = 'N/A',
-    periode = 'N/A',
-    sumber = 'N/A',
-    keterangan = 'Tidak ada',
-    existingTransactions = [],
-  } = params;
+  const {periode, sumber, jumlah, keterangan, tanggal} = route.params;
 
-  const noData = !route?.params;
+  const formatCurrency = value => {
+    return 'Rp ' + parseInt(value, 10).toLocaleString('id-ID');
+  };
 
   return (
     <View style={styles.container}>
       <Header title="Detail Pemasukan" />
       <Gap height={60} />
+      <Card style={styles.card}>
+        <Text style={styles.mount}>{formatCurrency(jumlah)}</Text>
+        <Text style={styles.total}>Total Pemasukan</Text>
+        <View style={styles.line} />
 
-      {noData ? (
-        <Text style={{textAlign: 'center', marginTop: 20}}>
-          Tidak ada data pemasukan untuk ditampilkan.
-        </Text>
-      ) : (
-        <Card style={styles.card}>
-          <Text style={styles.mount}>Rp {jumlah}</Text>
-          <Text style={styles.total}>Total Pemasukan</Text>
-          <View style={styles.line} />
-
-          <Gap height={44} />
-          <Row label="Tanggal" value={tanggal} />
-          <Gap height={27} />
-          <Row label="Periode" value={periode} />
-          <Gap height={27} />
-          <Row label="Sumber" value={sumber} />
-          <Gap height={27} />
-          <Row label="Keterangan" value={keterangan} />
-        </Card>
-      )}
+        <Gap height={44} />
+        <Row label="Tanggal" value={tanggal} />
+        <Gap height={27} />
+        <Row label="Periode" value={periode} />
+        <Gap height={27} />
+        <Row label="Sumber" value={sumber} />
+        <Gap height={27} />
+        <Row label="Keterangan" value={keterangan || '-'} />
+      </Card>
 
       <Gap height={54} />
       <TouchableOpacity
         onPress={() => {
-          const newTransaction = {
-            jumlah,
-            periode,
-            sumber,
-            tanggal,
-            keterangan,
-          };
           navigation.navigate('Pemasukan', {
             screen: 'DshbrdPemasukan',
-            newTransaction,
-            existingTransactions,
           });
         }}
         activeOpacity={0.5}>
@@ -97,7 +75,7 @@ const styles = StyleSheet.create({
   },
   line: {
     height: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff66',
     marginVertical: 12,
     marginTop: 36,
     marginHorizontal: 15,

@@ -1,18 +1,19 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome';
+  import { BackButton } from '../../../assets';
 
 const Header = ({onPress, title, withBackIcon, rightComponent}) => {
   return (
     <View style={styles.contentContainer}>
-      {withBackIcon && (
+      {withBackIcon ? (
         <TouchableOpacity style={styles.backButton} onPress={onPress}>
-          <Icon name="arrow-left" size={20} color="#fff" />
+          <BackButton />
         </TouchableOpacity>
+      ) : (
+        <View style={styles.backButton} /> 
       )}
       <Text style={styles.title}>{title}</Text>
 
-      {/* Komponen kanan opsional seperti tombol setting */}
       {rightComponent && (
         <View style={styles.rightComponent}>{rightComponent}</View>
       )}

@@ -24,7 +24,7 @@ const App = () => {
     <>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
             options={{headerShown: false}}
@@ -48,13 +48,13 @@ const App = () => {
             name="DashboardPage"
             component={DashboardPage}
             options={{headerShown: false}}
-          />
+          /> */}
           <Stack.Screen
             name="Pemasukan"
             component={Pemasukan}
             options={{headerShown: false}}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Settings"
             component={Settings}
             options={{headerShown: false}}
@@ -78,7 +78,7 @@ const App = () => {
             name="BottomTabs"
             component={BottomTabs}
             options={{headerShown: false}}
-          />
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
       <FlashMessage position="top" floating={true} duration={2000} />

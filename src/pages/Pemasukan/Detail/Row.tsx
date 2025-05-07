@@ -16,6 +16,7 @@ export default Row;
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'flex-start',
     paddingHorizontal: 8,
   },

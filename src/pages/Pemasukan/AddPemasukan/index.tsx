@@ -14,7 +14,7 @@ import Gap from '../../../components/atoms/Gap';
 import Button from '../../../components/atoms/Button';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {getDatabase, ref, set} from 'firebase/database';
+import {getDatabase, ref, push, serverTimestamp} from 'firebase/database';
 import {showMessage} from 'react-native-flash-message';
 
 const formatDate = date => {
@@ -79,21 +79,58 @@ const AddPemasukan = ({navigation, route}) => {
   const periodeList = ['Harian', 'Bulanan', 'Tahunan'];
 
   const onSimpan = () => {
-    const data = {
-      jumlah: jumlah,
-      tanggal: manualDate,
-      periode: periode,
-      sumber: sumber,
-      keterangan: keterangan,
-      existingTransactions,
-    };
-    const db = getDatabase();
-    set(ref(db, 'users/' + userId), data);
-    showMessage({
-      message: 'Pemasukan berhasil ditambahkan',
-      type: 'success',
-    });
-    navigation.navigate('Detail');
+    if (!jumlah || !sumber || !periode) {
+      showMessage({
+        message: 'Jumlah, sumber, dan periode tidak boleh kosong',
+        type: 'danger',
+      });
+      return;
+    }
+
+    try {
+      const data = {
+        jumlah: parseInt(jumlah, 10),
+        tanggal: manualDate,
+        periode,
+        sumber,
+        keterangan,
+        type: 'pemasukan',
+        existingTransactions,
+      };
+
+      const db = getDatabase();
+      const transactionRef = ref(db, 'transactions');
+      push(transactionRef, data)
+        .then(() => {
+          console.log('Data berhasil disimpan');
+          showMessage({
+            message: 'Data pemasukan berhasil disimpan',
+            type: 'success',
+          });
+
+          navigation.navigate('Detail', {
+            jumlah,
+            tanggal: manualDate,
+            periode,
+            sumber,
+            keterangan,
+            existingTransactions: [...existingTransactions, data],
+          });
+        })
+        .catch(error => {
+          console.error('Gagal menyimpan data:', error);
+          showMessage({
+            message: 'Gagal menyimpan data: ' + error.message,
+            type: 'danger',
+          });
+        });
+    } catch (error) {
+      console.error('Gagal memproses data:', error);
+      showMessage({
+        message: 'Gagal memproses data: ' + error.message,
+        type: 'danger',
+      });
+    }
   };
 
   return (
@@ -199,7 +236,7 @@ const AddPemasukan = ({navigation, route}) => {
             onChangeText={text => setKeterangan(text)}
           />
         </View>
-        <Gap height={154} />
+        <Gap height={168} />
 
         <Button label="Simpan" onPress={onSimpan} />
       </View>
