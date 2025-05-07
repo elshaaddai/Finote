@@ -7,9 +7,7 @@ import DashboardStack from '../../../navigation/DashboardStack';
 import WalletStack from '../../../navigation/WalletStack';
 import HistoryStack from '../../../navigation/HistoryStack';
 import ProfileStack from '../../../navigation/ProfilStack';
-
-// Halaman yang langsung digunakan
-import DshbrdPemasukan from '../../../pages/Pemasukan/DshbrdPemasukan';
+import PemasukanStack from '../../../navigation/PemasukanStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +18,7 @@ const BottomTabs = () => {
       tabBar={props => <CustomTabBar {...props} />}>
       <Tab.Screen name="Dashboard" component={DashboardStack} />
       <Tab.Screen name="Wallet" component={WalletStack} />
-      <Tab.Screen name="Add" component={DshbrdPemasukan} />
+      <Tab.Screen name="Add" component={PemasukanStack} />
       <Tab.Screen name="History" component={HistoryStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>

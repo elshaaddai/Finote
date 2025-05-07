@@ -23,7 +23,8 @@ const App = () => {
           <Stack.Screen name="WelcomePage" component={WelcomePage} />
           {/* <Stack.Screen name="SignUpPage" component={SignUpPage} /> */}
           <Stack.Screen name="LoginPage" component={LoginPage} />
-          <Stack.Screen name="Pemasukan" component={Pemasukan} />
+          {/* Hapus Pemasukan dari root navigator karena sekarang ada di dalam PemasukanStack */}
+          {/* <Stack.Screen name="Pemasukan" component={Pemasukan} /> */}
           <Stack.Screen name="BottomTabs" component={BottomTabs} />
         </Stack.Navigator>
       </NavigationContainer>

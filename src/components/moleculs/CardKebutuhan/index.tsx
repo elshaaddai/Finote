@@ -1,11 +1,26 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Button from '../../atoms/Button';
 
-const CardKebutuhan = ({title, description, amount, onPress}) => {
+const CardKebutuhan = ({
+  title,
+  description,
+  amount,
+  onPress,
+  onDelete,
+  showDelete = true,
+}) => {
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>{title}</Text>
+        {showDelete && (
+          <TouchableOpacity onPress={onDelete}>
+            <Icon name="delete" size={20} color="red" />
+          </TouchableOpacity>
+        )}
+      </View>
       <Text style={styles.description}>{description}</Text>
 
       <View style={styles.footer}>
@@ -30,15 +45,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 150,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   title: {
     fontWeight: '600',
     fontSize: 16,
-    marginBottom: 4,
   },
   description: {
     color: '#555',
     fontSize: 14,
-    marginBottom: 12,
+    marginVertical: 12,
   },
   footer: {
     flexDirection: 'row',

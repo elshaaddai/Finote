@@ -1,32 +1,52 @@
 import {StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getDatabase, ref, onValue, remove} from 'firebase/database';
 
 import Header from '../../components/moleculs/Header';
 import CardKebutuhan from '../../components/moleculs/CardKebutuhan';
 import Gap from '../../components/atoms/Gap';
 import TextLink from '../../components/atoms/TextLink';
+import {showMessage} from 'react-native-flash-message';
 
 const KategoriKebutuhan = ({navigation}) => {
   const [kategoris, setKategoris] = useState([]);
 
-  const loadData = async () => {
-    try {
-      const data = await AsyncStorage.getItem('kategori');
+  useEffect(() => {
+    const db = getDatabase();
+    const kategoriRef = ref(db, 'kategori');
+
+    const unsubscribe = onValue(kategoriRef, snapshot => {
+      const data = snapshot.val();
       if (data) {
-        setKategoris(JSON.parse(data));
+        const list = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key],
+        }));
+        setKategoris(list);
       } else {
         setKategoris([]);
       }
+    });
+
+    return () => unsubscribe(); // Unsubscribe saat komponen unmount
+  }, []);
+
+  const handleDelete = async id => {
+    try {
+      const db = getDatabase();
+      await remove(ref(db, `kategori/${id}`));
+      showMessage({
+        message: 'Kategori berhasil dihapus',
+        type: 'success',
+      });
     } catch (error) {
-      console.error('Gagal mengambil data:', error);
+      console.error('Gagal menghapus kategori:', error);
+      showMessage({
+        message: 'Gagal menghapus kategori',
+        type: 'danger',
+      });
     }
   };
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', loadData);
-    return unsubscribe;
-  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -34,22 +54,18 @@ const KategoriKebutuhan = ({navigation}) => {
       <Gap height={10} />
 
       <View>
-        {kategoris.length === 0 ? (
-          <TextLink
-            label="Belum ada kategori. Tambah sekarang"
-            onPress={() => navigation.navigate('BuatKebutuhan')}
+        {kategoris.map((item, index) => (
+          <CardKebutuhan
+            key={item.id}
+            title={item.title}
+            description={item.description}
+            amount={item.amount}
+            onPress={() =>
+              navigation.navigate('Pengeluaran', {kategoriId: item.id})
+            }
+            onDelete={() => handleDelete(item.id)}
           />
-        ) : (
-          kategoris.map((item, index) => (
-            <CardKebutuhan
-              key={index}
-              title={item.title}
-              description={item.description}
-              amount={item.amount}
-              onPress={() => navigation.navigate('Pengeluaran')}
-            />
-          ))
-        )}
+        ))}
 
         <TextLink
           label="Tambah"
@@ -65,5 +81,6 @@ export default KategoriKebutuhan;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
 });
