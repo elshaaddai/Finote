@@ -33,7 +33,7 @@ const App = () => {
             name="WelcomePage"
             component={WelcomePage}
             options={{headerShown: false}}
-          />
+          /> */}
           <Stack.Screen
             name="SignUpPage"
             component={SignUpPage}
@@ -48,18 +48,18 @@ const App = () => {
             name="DashboardPage"
             component={DashboardPage}
             options={{headerShown: false}}
-          /> */}
+          />
           <Stack.Screen
             name="Pemasukan"
             component={Pemasukan}
             options={{headerShown: false}}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="Settings"
             component={Settings}
             options={{headerShown: false}}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="BuatKebutuhan"
             component={BuatKebutuhan}
             options={{headerShown: false}}

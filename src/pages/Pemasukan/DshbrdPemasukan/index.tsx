@@ -111,9 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    width: 380,
-    height: 191,
-    marginTop: 87,
+    marginTop: 50,
     margin: 16,
   },
   Title: {
