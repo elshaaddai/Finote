@@ -10,6 +10,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import BottomTabs from './src/components/moleculs/BottomTabs';
 import FlashMessage from 'react-native-flash-message';
+import AddPemasukan from './src/pages/Pemasukan/AddPemasukan';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ const App = () => {
           <Stack.Screen name="SignUpPage" component={SignUpPage} />
           <Stack.Screen name="LoginPage" component={LoginPage} />
           <Stack.Screen name="BottomTabs" component={BottomTabs} />
+          <Stack.Screen name="AddPemasukan" component={AddPemasukan} />
         </Stack.Navigator>
       </NavigationContainer>
       <FlashMessage position="top" floating={true} duration={2000} />
