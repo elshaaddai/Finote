@@ -86,11 +86,11 @@ const Settings = ({navigation}) => {
 
   return (
     <View>
-      <Header title="Settings" withBackIcon/>
+      <Header title="Settings"/>
       <View style={styles.container}>
-        <Gap height={32} />
+        <Gap height={10} />
         <Text style={styles.notif}>Notifikasi & Pengingat</Text>
-        <Gap height={28} />
+        <Gap height={10} />
         <View style={styles.line} />
         <Gap height={24} />
 
@@ -155,7 +155,10 @@ const Settings = ({navigation}) => {
         <View style={styles.line} />
 
         <Gap height={20} />
+        <TouchableOpacity onPress={() => navigation.navigate('PanduanPengguna')} >
+
         <Text style={styles.notif}>Panduan Pengguna</Text>
+        </TouchableOpacity>
         <Gap height={15} />
         <TouchableOpacity
           onPress={() => {
