@@ -43,12 +43,12 @@ const App = () => {
             name="LoginPage"
             component={LoginPage}
             options={{headerShown: false}}
-          />
+          /> */}
           <Stack.Screen
             name="DashboardPage"
             component={DashboardPage}
             options={{headerShown: false}}
-          /> */}
+          />
           <Stack.Screen
             name="Pemasukan"
             component={Pemasukan}
