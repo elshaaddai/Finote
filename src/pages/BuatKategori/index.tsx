@@ -1,27 +1,77 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
-import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Header from '../../components/moleculs/Header';
 import TextInput from '../../components/moleculs/TextInput';
 import Gap from '../../components/atoms/Gap';
 import Button from '../../components/atoms/Button';
 
-const BuatKebutuhan = ({onPress, navigation}) => {
+const BuatKebutuhan = ({navigation}) => {
+  const [nama, setNama] = useState('');
+  const [nominal, setNominal] = useState('');
+  const [deskripsi, setDeskripsi] = useState('');
+  const [batas, setBatas] = useState('');
+
+  const handleSubmit = async () => {
+    if (!nama || !nominal) {
+      alert('Nama dan Nominal wajib diisi');
+      return;
+    }
+
+    const newKategori = {
+      title: nama,
+      amount: nominal,
+      description: deskripsi || '-',
+      batas: batas || '0',
+    };
+
+    try {
+      const existing = await AsyncStorage.getItem('kategori');
+      const kategoriArray = existing ? JSON.parse(existing) : [];
+      kategoriArray.push(newKategori);
+      await AsyncStorage.setItem('kategori', JSON.stringify(kategoriArray));
+      navigation.navigate('KategoriKebutuhan');
+    } catch (error) {
+      console.error('Gagal menyimpan data:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Header title="Buat Kategori Kebutuhan" />
       <Gap height={25} />
-      <TextInput label="Nama Kategori" placeholder="" />
-      <Gap height={20} />
-      <TextInput label="Nominal" placeholder="Rp" />
-      <Gap height={20} />
-      <TextInput label="Deskripsi" placeholder="" />
-      <Gap height={20} />
-      <TextInput label="Batas Minimum Sisa" placeholder="Rp" />
-      <Gap height={15} />
-      <Button
-        label="Buat"
-        onPress={() => navigation.navigate('KategoriKebutuhan')}
+      <TextInput
+        label="Nama Kategori"
+        placeholder=""
+        value={nama}
+        onChangeText={setNama}
       />
+      <Gap height={20} />
+      <TextInput
+        label="Nominal"
+        placeholder="Rp"
+        value={nominal}
+        onChangeText={setNominal}
+        keyboardType="numeric"
+      />
+      <Gap height={20} />
+      <TextInput
+        label="Deskripsi"
+        placeholder=""
+        value={deskripsi}
+        onChangeText={setDeskripsi}
+      />
+      <Gap height={20} />
+      <TextInput
+        label="Batas Minimum Sisa"
+        placeholder="Rp"
+        value={batas}
+        onChangeText={setBatas}
+        keyboardType="numeric"
+      />
+      <Gap height={15} />
+      <Button label="Buat" onPress={handleSubmit} />
     </View>
   );
 };
