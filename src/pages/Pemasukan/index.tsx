@@ -11,11 +11,11 @@ const Stack = createNativeStackNavigator();
 const Pemasukan = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="DshbrdPemasukan"
         component={DshbrdPemasukan}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="AddPemasukan"
         component={AddPemasukan}
