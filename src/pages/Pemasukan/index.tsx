@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import DshbrdPemasukan from './DshbrdPemasukan';
+// import DshbrdPemasukan from './DshbrdPemasukan';
 import AddPemasukan from './AddPemasukan';
 import Detail from './Detail';
 import LastTransaksi from './LastTransaksi';
