@@ -1,4 +1,4 @@
-import {Settings, StyleSheet} from 'react-native';
+import { StyleSheet} from 'react-native';
 import React from 'react';
 import SplashScreen from './src/pages/SplashScreen';
 import WelcomePage from './src/pages/Tampilan';
@@ -12,6 +12,8 @@ import BottomTabs from './src/components/moleculs/BottomTabs';
 import FlashMessage from 'react-native-flash-message';
 import Pemasukan from './src/pages/Pemasukan';
 import ProfilePage from './src/pages/Profile';
+import Settings from './src/pages/Settings';
+import PanduanPengguna from './src/pages/Panduan';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,11 +24,13 @@ const App = () => {
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
           <Stack.Screen name="WelcomePage" component={WelcomePage} />
-          {/* <Stack.Screen name="SignUpPage" component={SignUpPage} /> */}
+          <Stack.Screen name="SignUpPage" component={SignUpPage} />
           <Stack.Screen name="LoginPage" component={LoginPage} />
           <Stack.Screen name="Pemasukan" component={Pemasukan} />
           <Stack.Screen name="BottomTabs" component={BottomTabs} />
           <Stack.Screen name="ProfilePage" component={ProfilePage}/>
+          <Stack.Screen name="Settings" component={Settings}/>
+          <Stack.Screen name="PanduanPengguna" component={PanduanPengguna}/>
         </Stack.Navigator>
       </NavigationContainer>
       <FlashMessage position="top" floating={true} duration={2000} />

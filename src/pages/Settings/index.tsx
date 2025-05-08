@@ -55,7 +55,7 @@ const Settings = ({navigation}) => {
 
                 navigation.reset({
                   index: 0,
-                  routes: [{name: 'SignUpPage'}], 
+                  routes: [{name: 'SignUpPage'}],
                 });
               } catch (error) {
                 console.log('Gagal hapus akun: ', error);
